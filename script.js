@@ -24,3 +24,29 @@ async function initPython() {
 
 initPython();
 
+async function showLiveHash() {
+  if (!pyodideInstance) return;
+  const key = document.getElementById("inputKey").value;
+  if (!key) {
+    document.getElementById("hashPreview").innerText = "Hash: -";
+    return;
+  }
+
+  const breakdown = await pyodideInstance.runPythonAsync(`get_hash_breakdown("${key}")`);
+  const data = breakdown.toJs();
+  breakdown.destroy();
+
+  document.getElementById("hashPreview").innerText =
+    `Hash: ${data.get("hash")} (${data.get("formula")})`;
+}
+
+async function handleAdd() {
+  const k = document.getElementById("inputKey").value.trim();
+  const v = document.getElementById("inputValue").value.trim();
+  if (!k || !v) return setStatus("Enter both key and value", true);
+
+  await pyodideInstance.runPythonAsync(`ht.add("${k}", "${v}")`);
+  setStatus(`Added pair: "${k}" -> "${v}"`);
+  renderBuckets();
+}
+
