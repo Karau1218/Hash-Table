@@ -150,3 +150,43 @@ button:hover {
   margin: 0 0 14px 0;
 }
 
+.bucket-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.bucket-card {
+  background: #0f172a;
+  border-left: 4px solid #38bdf8;
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.bucket-header {
+  font-size: 12px;
+  font-family: monospace;
+  color: #38bdf8;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.bucket-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.kv-pair {
+  background: #1e293b;
+  border: 1px solid #334155;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.kv-key { color: #facc15; font-weight: 600; }
+.kv-val { color: #f8fafc; }
