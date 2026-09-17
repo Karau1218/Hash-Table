@@ -50,3 +50,55 @@ async function handleAdd() {
   renderBuckets();
 }
 
+async function handleLookup() {
+  const k = document.getElementById("inputKey").value.trim();
+  if (!k) return setStatus("Enter key to search", true);
+
+  const res = await pyodideInstance.runPythonAsync(`ht.lookup("${k}")`);
+  if (res === null) {
+    setStatus(`Key "${k}" not found (None)`, true);
+  } else {
+    setStatus(`Found "${k}": "${res}"`);
+    document.getElementById("inputValue").value = res;
+  }
+}
+
+async function handleRemove() {
+  const k = document.getElementById("inputKey").value.trim();
+  if (!k) return setStatus("Enter key to remove", true);
+
+  await pyodideInstance.runPythonAsync(`ht.remove("${k}")`);
+  setStatus(`Removed key: "${k}"`);
+  renderBuckets();
+}
+
+async function renderBuckets() {
+  const rawJson = await pyodideInstance.runPythonAsync("get_table_state_json()");
+  const collection = JSON.parse(rawJson);
+  const container = document.getElementById("bucketContainer");
+  container.innerHTML = "";
+
+  const hashes = Object.keys(collection);
+  if (hashes.length === 0) {
+    container.innerHTML = '<div style="color: #64748b; font-size: 13px;">Hash table is empty.</div>';
+    return;
+  }
+
+  hashes.forEach((hashVal) => {
+    const bucketCard = document.createElement("div");
+    bucketCard.className = "bucket-card";
+
+    const bucketItems = collection[hashVal];
+    const isCollision = Object.keys(bucketItems).length > 1;
+
+    let itemsHtml = "";
+    for (const [k, v] of Object.entries(bucketItems)) {
+      itemsHtml += `
+        <span class="kv-pair">
+          <span class="kv-key">${escapeHtml(k)}</span>: 
+          <span class="kv-val">${escapeHtml(String(v))}</span>
+        </span>
+      `;
+    }
+
+    
