@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hash Table Visualizer</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.25.0/full/pyodide.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Hash Table Visualizer</h1>
+      <p class="subtitle">Inspect character ASCII sums, bucket storage, and collision handling</p>
+    </header>
+
+    <div class="grid">
+      <!-- Left: Interactive Controls -->
+      <div class="card">
+        <h2>Operations</h2>
+
+        <div class="form-group">
+          <label>Key</label>
+          <input type="text" id="inputKey" placeholder="e.g., name, act, cat" oninput="showLiveHash()" />
+          <div id="hashPreview" class="hash-preview">Hash: -</div>
+        </div>
+
+        <div class="form-group">
+          <label>Value</label>
+          <input type="text" id="inputValue" placeholder="e.g., Alice, 42" />
+        </div>
+
+        <div class="btn-group">
+          <button class="primary-btn" onclick="handleAdd()">Add / Update</button>
+          <button class="secondary-btn" onclick="handleLookup()">Lookup</button>
+          <button class="danger-btn" onclick="handleRemove()">Remove</button>
+        </div>
+
+        <div id="status">Loading Python runtime...</div>
+      </div>
+
+      
