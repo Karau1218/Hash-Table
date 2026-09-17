@@ -101,4 +101,35 @@ async function renderBuckets() {
       `;
     }
 
-    
+    bucketCard.innerHTML = `
+      <div class="bucket-header">
+        Bucket [${hashVal}] ${isCollision ? '<span style="color: #f87171;">(Collision Detected)</span>' : ""}
+      </div>
+      <div class="bucket-items">${itemsHtml}</div>
+    `;
+
+    container.appendChild(bucketCard);
+  });
+}
+
+async function loadCollisionExample() {
+  // "cat", "act", and "tac" all sum to: 99 + 97 + 116 = 312
+  await pyodideInstance.runPythonAsync(`
+ht.add("cat", "feline")
+ht.add("act", "theater")
+ht.add("tac", "tic-tac-toe")
+ht.add("dog", "canine")
+  `);
+  setStatus("Loaded demo: 'cat', 'act', and 'tac' share bucket 312");
+  renderBuckets();
+}
+
+function setStatus(msg, isError = false) {
+  const el = document.getElementById("status");
+  el.innerText = msg;
+  el.style.color = isError ? "#f87171" : "#38bdf8";
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
